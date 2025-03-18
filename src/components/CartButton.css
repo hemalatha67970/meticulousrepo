@@ -1,0 +1,7 @@
+.shopping_cart_link {
+  background: url("../assets/img/cart.png") no-repeat center center;
+  height: 40px;
+  width: 40px;
+  display: block;
+  position: relative;
+}

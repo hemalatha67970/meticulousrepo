@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # These are some examples of commonly ignored file patterns.
 # You should customize this list as applicable to your project.
 # Learn more about .gitignore:
@@ -48,3 +49,34 @@ Thumbs.db
 *.mov
 *.wmv
 
+=======
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+**/.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.log
+.project
+bin
+dist
+screenshots
+.idea
+.coverage
+storybook-static
+.tmp
+.eslintcache
+>>>>>>> bb36513 (added in new repo)
