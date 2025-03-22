@@ -1,14 +1,12 @@
 // Needed to add the below due to issues in IE11, see this thread
 // https://github.com/facebook/create-react-app/issues/9906#issuecomment-720905753
 /** @jsxRuntime classic */
-
 import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
-import { tryLoadAndStartRecorder } from "@alwaysmeticulous/recorder-loader";
 import { BacktraceClient, ErrorBoundary } from "@backtrace-labs/react";
-import React from "react";
-import ReactDOM from "react-dom/client"; // ✅ React 19 requires 'react-dom/client'
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import "./index.css";
 import Cart from "./pages/Cart";
@@ -25,49 +23,81 @@ import { ShoppingCart } from "./utils/shopping-cart";
 import { InventoryData } from "./utils/InventoryData.js";
 import { InventoryDataLong } from "./utils/InventoryDataLong.js";
 
-// Initialize Backtrace Client
-BacktraceClient.initialize({
-  name: "Swag Store",
-  version: "3.0.0",
-  url: "https://submit.backtrace.io/UNIVERSE/TOKEN/json",
-  userAttributes: () => ({
-    user: currentUser(),
-    shoppingCart: ShoppingCart.getCartContents(),
-  }),
-});
-
-// Function to start Meticulous Recorder and then render the app
-(async function startApp() {
+// Initialize Meticulous Recorder
+(async function startRecorder() {
   try {
+    const { tryLoadAndStartRecorder } = await import("@alwaysmeticulous/recorder-loader");
     await tryLoadAndStartRecorder({
       recordingToken: "vyBbclZ59wHhyNBeK3UuJbmiLFz3NUVSIwBtbIuC",
       isProduction: false,
     });
     console.log("Meticulous Recorder started successfully.");
   } catch (error) {
-    console.error("Meticulous Recorder failed to start:", error);
+    console.error("Meticulous Recorder initialization failed:", error);
+  }
+})();
+
+const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const initializeApp = async () => {
+      try {
+        BacktraceClient.initialize({
+          name: "Swag Store",
+          version: "3.0.0",
+          url: "https://submit.backtrace.io/UNIVERSE/TOKEN/json",
+          userAttributes: () => ({
+            user: currentUser(),
+            shoppingCart: ShoppingCart.getCartContents(),
+          }),
+        });
+        console.log("Backtrace Client initialized.");
+      } catch (error) {
+        console.error("Initialization error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    initializeApp();
+  }, []);
+
+  useEffect(() => {
+    const passwordField = document.querySelector("input[type='password']");
+    if (passwordField) {
+      passwordField.value="";
+      passwordField.dispatchEvent(new Event("input", { bubbles: true }));
+      passwordField.value = "secret_sauce";
+      passwordField.dispatchEvent(new Event("input", { bubbles: true }));
+      passwordField.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  // ✅ React 19 requires `createRoot` instead of `ReactDOM.render`
-  const root = ReactDOM.createRoot(document.getElementById("root"));
-
-  root.render(
+  return (
     <ErrorBoundary>
       <Router>
-        <Route exact path={ROUTES.LOGIN} component={Login} />
-        <Route path={ROUTES.INVENTORY} component={(props) => <Inventory data={InventoryData} {...props} />} />
-        <Route path={ROUTES.INVENTORY_LONG} component={(props) => <Inventory data={InventoryDataLong} {...props} />} />
-        <Route path={ROUTES.INVENTORY_LIST} component={InventoryItem} />
-        <Route path={ROUTES.CART} component={Cart} />
-        <Route path={ROUTES.CHECKOUT_STEP_ONE} component={CheckOutStepOne} />
-        <Route path={ROUTES.CHECKOUT_STEP_TWO} component={CheckOutStepTwo} />
-        <Route path={ROUTES.CHECKOUT_COMPLETE} component={Finish} />
+        <Routes>
+          <Route path={ROUTES.LOGIN} element={<Login />} />
+          <Route element={<PrivateRoute />}>
+            <Route path={ROUTES.INVENTORY} element={<Inventory data={InventoryData} />} />
+            <Route path={ROUTES.INVENTORY_LONG} element={<Inventory data={InventoryDataLong} />} />
+            <Route path={ROUTES.INVENTORY_LIST} element={<InventoryItem />} />
+            <Route path={ROUTES.CART} element={<Cart />} />
+            <Route path={ROUTES.CHECKOUT_STEP_ONE} element={<CheckOutStepOne />} />
+            <Route path={ROUTES.CHECKOUT_STEP_TWO} element={<CheckOutStepTwo />} />
+            <Route path={ROUTES.CHECKOUT_COMPLETE} element={<Finish />} />
+          </Route>
+        </Routes>
       </Router>
     </ErrorBoundary>
   );
+};
 
-  console.log(ROUTES);
-})();
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
 
-// Register Service Worker
 serviceWorkerRegistration.register();

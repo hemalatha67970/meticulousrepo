@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use `useNavigate` instead of `useHistory`
 import PropTypes from "prop-types";
 import { ShoppingCart } from "../utils/shopping-cart";
 import { isErrorUser, isProblemUser } from "../utils/Credentials";
 import { ROUTES } from "../utils/Constants";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "./Button";
 import "./InventoryListItem.css";
-
-// Import default image for error fallback
-//import defaultImage from "../assets/img/default.jpg";
 
 const InventoryListItem = ({
   isTextAlignRight,
@@ -19,7 +16,7 @@ const InventoryListItem = ({
   name,
   price,
 }) => {
-  const history = useHistory();
+  const navigate = useNavigate(); // Use useNavigate hook
   const [itemInCart, setItemInCart] = useState(ShoppingCart.isItemInCart(id));
 
   const addToCart = (itemId) => {
@@ -46,6 +43,11 @@ const InventoryListItem = ({
   const itemLink = `${ROUTES.INVENTORY_LIST}?id=${linkId}`;
   const itemNameClass = `inventory_item_name ${isTextAlignRight ? "align_right" : ""}`;
 
+  // Set default image if `image_url` is missing
+  const imagePath = image_url
+    ? `/assets/img/${image_url}`
+    : "/assets/img/default.jpg";
+
   return (
     <div className="inventory_item" data-test="inventory-item">
       <div className="inventory_item_img">
@@ -54,21 +56,11 @@ const InventoryListItem = ({
           id={`item_${id}_img_link`}
           onClick={(e) => {
             e.preventDefault();
-            history.push(itemLink);
+            navigate(itemLink); // Use navigate to change the route
           }}
           data-test={`item-${id}-img-link`}
         >
-         {/* <img
-  src={`/assets/img/${image_url}`}
-  onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
-  alt="Product Image"
-/> */}
-
-<img
-  src={`/assets/img/${image_url}`} alt={name} />
-  {/* onError={(e) => (e.target.src = "https://via.placeholder.com/150")}
-  alt={name} */}
-
+          <img src={imagePath} alt={name} onError={(e) => (e.target.src = "/assets/img/default.jpg")} />
         </a>
       </div>
 
@@ -79,7 +71,7 @@ const InventoryListItem = ({
             id={`item_${id}_title_link`}
             onClick={(e) => {
               e.preventDefault();
-              history.push(itemLink);
+              navigate(itemLink); // Use navigate to change the route
             }}
             data-test={`item-${id}-title-link`}
           >

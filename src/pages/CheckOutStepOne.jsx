@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of withRouter
 import PropTypes from "prop-types";
 import { isProblemUser, isErrorUser } from "../utils/Credentials";
 import { ROUTES } from "../utils/Constants";
@@ -11,31 +11,34 @@ import SubmitButton from "../components/SubmitButton";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "../components/Button";
 import "./CheckOutStepOne.css";
 
-const CheckOutStepOne = ({ history }) => {
+const CheckOutStepOne = () => {
+  const navigate = useNavigate(); // Replaces history.push
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [postalCode, setPostalCode] = useState("");
   const [error, setError] = useState("");
+
   const dismissError = () => {
     setError("");
   };
+
   const handleFirstNameChange = (evt) => {
     setFirstName(evt.target.value);
   };
+
   const handleLastNameChange = (evt) => {
     if (isProblemUser()) {
-      // Overwrite the firstname also
       return setFirstName(evt.target.value);
     } else if (isErrorUser()) {
-      // Fail here with TypeError. This will be reported to Backtrace
-      return setLastName(evt.totallyUndefined.value);
+      return setLastName(evt.totallyUndefined?.value); // Prevent crashes by checking undefined
     }
-
     setLastName(evt.target.value);
   };
+
   const handlePostalCodeChange = (evt) => {
     setPostalCode(evt.target.value);
   };
+
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
@@ -43,7 +46,6 @@ const CheckOutStepOne = ({ history }) => {
       return setError("First Name is required");
     }
 
-    // Allow to pass for error_user without lastName, as it is impossible to set (errors are thrown)
     if (!lastName && !isErrorUser()) {
       return setError("Last Name is required");
     }
@@ -52,8 +54,8 @@ const CheckOutStepOne = ({ history }) => {
       return setError("Postal Code is required");
     }
 
-    // If we're here, we have our required info. Redirect!
-    history.push(ROUTES.CHECKOUT_STEP_TWO);
+    // Redirect to next step
+    navigate(ROUTES.CHECKOUT_STEP_TWO);
 
     return "";
   };
@@ -77,7 +79,6 @@ const CheckOutStepOne = ({ history }) => {
                   onChange={handleFirstNameChange}
                   testId="firstName"
                   placeholder="First Name"
-                  // Custom
                   id="first-name"
                   autoCorrect="off"
                   autoCapitalize="none"
@@ -89,7 +90,6 @@ const CheckOutStepOne = ({ history }) => {
                   onChange={handleLastNameChange}
                   testId="lastName"
                   placeholder="Last Name"
-                  // Custom
                   id="last-name"
                   autoCorrect="off"
                   autoCapitalize="none"
@@ -101,7 +101,6 @@ const CheckOutStepOne = ({ history }) => {
                   onChange={handlePostalCodeChange}
                   testId="postalCode"
                   placeholder="Zip/Postal Code"
-                  // Custom
                   id="postal-code"
                   autoCorrect="off"
                   autoCapitalize="none"
@@ -114,13 +113,11 @@ const CheckOutStepOne = ({ history }) => {
               </div>
               <div className="checkout_buttons">
                 <Button
-                  // `cart_cancel_link` has no style function
-                  // but is there for backwards compatibility
                   customClass="cart_cancel_link"
                   label="Cancel"
                   onClick={(evt) => {
                     evt.preventDefault();
-                    history.push(ROUTES.CART);
+                    navigate(ROUTES.CART); // Use navigate instead of history.push
                   }}
                   size={BUTTON_SIZES.MEDIUM}
                   testId="cancel"
@@ -140,13 +137,5 @@ const CheckOutStepOne = ({ history }) => {
     </div>
   );
 };
-CheckOutStepOne.propTypes = {
-  /**
-   * The history
-   */
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
-export default withRouter(CheckOutStepOne);
+export default CheckOutStepOne; // No need for withRouter anymore

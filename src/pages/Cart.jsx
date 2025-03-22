@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of withRouter
 import { ROUTES } from "../utils/Constants";
 import { ShoppingCart } from "../utils/shopping-cart";
 import { InventoryData } from "../utils/InventoryData";
@@ -10,11 +10,10 @@ import Button, { BUTTON_SIZES, BUTTON_TYPES } from "../components/Button";
 import "./Cart.css";
 import { isVisualUser } from "../utils/Credentials";
 
-const Cart = ({ history }) => {
+const Cart = () => {
+  const navigate = useNavigate(); // Replaces history.push
   const contents = ShoppingCart.getCartContents();
-  const buttonClass = `checkout_button ${
-    isVisualUser() ? "btn_visual_failure" : ""
-  }`;
+  const buttonClass = `checkout_button ${isVisualUser() ? "btn_visual_failure" : ""}`;
 
   return (
     <div id="page_wrapper" className="page_wrapper">
@@ -45,7 +44,7 @@ const Cart = ({ history }) => {
                 label="Continue Shopping"
                 onClick={(evt) => {
                   evt.preventDefault();
-                  history.push(ROUTES.INVENTORY);
+                  navigate(ROUTES.INVENTORY); // Use navigate instead of history.push
                 }}
                 size={BUTTON_SIZES.MEDIUM}
                 testId="continue-shopping"
@@ -53,12 +52,10 @@ const Cart = ({ history }) => {
               />
               <Button
                 label="Checkout"
-                // `checkout_button` has no style function
-                // but is there for backwards compatibility
                 customClass={buttonClass}
                 onClick={(evt) => {
                   evt.preventDefault();
-                  history.push(ROUTES.CHECKOUT_STEP_ONE);
+                  navigate(ROUTES.CHECKOUT_STEP_ONE); // Use navigate instead of history.push
                 }}
                 size={BUTTON_SIZES.MEDIUM}
                 testId="checkout"
@@ -73,4 +70,5 @@ const Cart = ({ history }) => {
   );
 };
 
-export default withRouter(Cart);
+export default Cart; // No need for withRouter anymore
+

@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { isErrorUser, isProblemUser } from "../utils/Credentials";
 import { ROUTES } from "../utils/Constants";
@@ -11,10 +11,10 @@ import HeaderContainer from "../components/HeaderContainer";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "../components/Button";
 import "./CheckOutStepTwo.css";
 
-const CheckOutStepTwo = ({ history }) => {
+const CheckOutStepTwo = () => {
+  const navigate = useNavigate();  // Replace history with useNavigate()
+
   const clearCart = () => {
-    /* istanbul ignore else */
-    // No cart clear on order complete for the problem user
     if (isProblemUser()) {
       return;
     } else if (isErrorUser()) {
@@ -25,14 +25,14 @@ const CheckOutStepTwo = ({ history }) => {
     // Wipe out our shopping cart
     ShoppingCart.resetCart();
   };
+
   const contents = ShoppingCart.getCartContents();
   let orderTotal = 0;
 
   for (const curItem in contents) {
-    orderTotal = orderTotal + InventoryData[contents[curItem]].price;
+    orderTotal += InventoryData[contents[curItem]].price;
     if (isProblemUser()) {
-      // double up for the problem user
-      orderTotal = orderTotal + InventoryData[contents[curItem]].price;
+      orderTotal += InventoryData[contents[curItem]].price;
     }
   }
 
@@ -58,42 +58,27 @@ const CheckOutStepTwo = ({ history }) => {
               <div className="cart_desc_label" data-test="cart-desc-label">
                 Description
               </div>
-              {contents.map((item, i) => {
-                return <CartItem key={i} item={InventoryData[item]} />;
-              })}
+              {contents.map((item, i) => (
+                <CartItem key={i} item={InventoryData[item]} />
+              ))}
             </div>
             <div className="summary_info">
-              <div
-                className="summary_info_label"
-                data-test="payment-info-label"
-              >
+              <div className="summary_info_label" data-test="payment-info-label">
                 Payment Information:
               </div>
-              <div
-                className="summary_value_label"
-                data-test="payment-info-value"
-              >
+              <div className="summary_value_label" data-test="payment-info-value">
                 SauceCard #31337
               </div>
-              <div
-                className="summary_info_label"
-                data-test="shipping-info-label"
-              >
+              <div className="summary_info_label" data-test="shipping-info-label">
                 Shipping Information:
               </div>
-              <div
-                className="summary_value_label"
-                data-test="shipping-info-value"
-              >
+              <div className="summary_value_label" data-test="shipping-info-value">
                 Free Pony Express Delivery!
               </div>
               <div className="summary_info_label" data-test="total-info-label">
                 Price Total
               </div>
-              <div
-                className="summary_subtotal_label"
-                data-test="subtotal-label"
-              >
+              <div className="summary_subtotal_label" data-test="subtotal-label">
                 Item total: ${orderTotal}
               </div>
               <div className="summary_tax_label" data-test="tax-label">
@@ -104,13 +89,11 @@ const CheckOutStepTwo = ({ history }) => {
               </div>
               <div className="cart_footer">
                 <Button
-                  // `cart_cancel_link` has no style function
-                  // but is there for backwards compatibility
                   customClass="cart_cancel_link"
                   label="Cancel"
                   onClick={(evt) => {
                     evt.preventDefault();
-                    history.push(ROUTES.INVENTORY);
+                    navigate(ROUTES.INVENTORY);  // Use navigate instead of history.push
                   }}
                   size={BUTTON_SIZES.MEDIUM}
                   testId="cancel"
@@ -122,7 +105,7 @@ const CheckOutStepTwo = ({ history }) => {
                   onClick={(evt) => {
                     evt.preventDefault();
                     clearCart();
-                    history.push(ROUTES.CHECKOUT_COMPLETE);
+                    navigate(ROUTES.CHECKOUT_COMPLETE);  // Use navigate instead of history.push
                   }}
                   size={BUTTON_SIZES.MEDIUM}
                   testId="finish"
@@ -137,13 +120,5 @@ const CheckOutStepTwo = ({ history }) => {
     </div>
   );
 };
-CheckOutStepTwo.propTypes = {
-  /**
-   * The history
-   */
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
-export default withRouter(CheckOutStepTwo);
+export default CheckOutStepTwo;

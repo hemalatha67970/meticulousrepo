@@ -1,14 +1,15 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of withRouter
 import Checkmark from "../assets/img/checkmark.png";
 import SwagLabsFooter from "../components/Footer";
 import HeaderContainer from "../components/HeaderContainer";
-import PropTypes from "prop-types";
 import Button, { BUTTON_SIZES } from "../components/Button";
 import { ROUTES } from "../utils/Constants";
 import "./Finish.css";
 
-const Finish = ({ history }) => {
+const Finish = () => {
+  const navigate = useNavigate(); // Replace history with useNavigate
+
   return (
     <div id="page_wrapper" className="page_wrapper">
       <div id="contents_wrapper">
@@ -33,7 +34,7 @@ const Finish = ({ history }) => {
           </div>
           <Button
             label="Back Home"
-            onClick={() => history.push(ROUTES.INVENTORY)}
+            onClick={() => navigate(ROUTES.INVENTORY)} // Use navigate instead of history.push
             size={BUTTON_SIZES.SMALL}
             testId="back-to-products"
           />
@@ -43,13 +44,5 @@ const Finish = ({ history }) => {
     </div>
   );
 };
-Finish.propTypes = {
-  /**
-   * The history
-   */
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-};
 
-export default withRouter(Finish);
+export default Finish;

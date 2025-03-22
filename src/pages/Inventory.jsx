@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of withRouter
 import {
   isErrorUser,
   isPerformanceGlitchUser,
@@ -15,6 +15,8 @@ import "./Inventory.css";
 import { BacktraceClient } from "@backtrace-labs/react";
 
 const Inventory = ({ data }) => {
+  const navigate = useNavigate(); // Use navigate if you need routing
+
   const InventoryData = data;
   const [inventoryList, setInventoryList] = useState(
     sortAsc(InventoryData, "name")
@@ -25,7 +27,7 @@ const Inventory = ({ data }) => {
   const startPerformanceGlitch = (duration) => {
     const start = new Date().getTime();
     while (new Date().getTime() < start + duration) {
-      // PageLoad increases
+      // Simulating performance issue
     }
   };
 
@@ -97,7 +99,6 @@ const Inventory = ({ data }) => {
             >
               <div className="inventory_list" data-test="inventory-list">
                 {inventoryList.map((item, i) => {
-                  // ✅ Debugging: Check if image URLs are correct
                   console.log("Item ID:", item.id, "Image URL:", item.image_url);
 
                   return (
@@ -127,4 +128,4 @@ const Inventory = ({ data }) => {
   );
 };
 
-export default withRouter(Inventory);
+export default Inventory; // No need for withRouter

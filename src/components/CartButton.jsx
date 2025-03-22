@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Use useNavigate instead of useHistory
 import { ShoppingCart } from "../utils/shopping-cart";
 import { ROUTES } from "../utils/Constants";
 import "./CartButton.css";
 
 const CartButton = () => {
-  const history = useHistory();
+  const navigate = useNavigate(); // useNavigate replaces useHistory
   const [cartContents, setCartContents] = useState(ShoppingCart.getCartContents() || []);
 
   // Memoized listener to update state when cart contents change
@@ -26,7 +26,7 @@ const CartButton = () => {
   return (
     <button
       className="shopping_cart_link"
-      onClick={() => history.push(ROUTES.CART)}
+      onClick={() => navigate(ROUTES.CART)} // Use navigate instead of history.push
       data-test="shopping-cart-link"
     >
       {cartContents.length > 0 && (
@@ -39,5 +39,3 @@ const CartButton = () => {
 };
 
 export default CartButton;
-
-

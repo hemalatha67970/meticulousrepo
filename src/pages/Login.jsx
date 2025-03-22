@@ -1,11 +1,11 @@
-import React, { useEffect, Fragment } from "react";
-import { withRouter } from "react-router-dom";
-import { useState } from "react";
+import React, { useEffect, Fragment, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Login.css";
 import {
   isLockedOutUser,
   setCredentials,
   verifyCredentials,
+  currentUser,
 } from "../utils/Credentials";
 import { ROUTES, VALID_USERNAMES, VALID_PASSWORD } from "../utils/Constants";
 import InputError, { INPUT_TYPES } from "../components/InputError";
@@ -13,70 +13,58 @@ import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";
 import { BacktraceClient } from "@backtrace-labs/react";
 
-function Login(props) {
-  const { history, location } = props;
+function Login({ simulatedUsername = "", simulatedPassword = "" }) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [error, setError] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState(simulatedUsername || "");
+  const [password, setPassword] = useState(simulatedPassword || "");
+  const [isPrefilled, setIsPrefilled] = useState({
+    username: Boolean(simulatedUsername),
+    password: Boolean(simulatedPassword),
+  });
 
   useEffect(() => {
-    if (location.state) {
-      return setError(
-        `You can only access '${location.state.from.pathname}' when you are logged in.`
-      );
+    if (location.state?.from) {
+      setError(`Redirected from: ${location.state.from.pathname}`);
     }
   }, [location.state]);
 
-  const dismissError = () => {
-    setError("");
-  };
+  useEffect(() => {
+    setUsername(simulatedUsername);
+    setPassword(simulatedPassword);
+    setIsPrefilled({
+      username: Boolean(simulatedUsername),
+      password: Boolean(simulatedPassword),
+    });
+  }, [simulatedUsername, simulatedPassword]);
+
+  const dismissError = () => setError("");
 
   const handleSubmit = (evt) => {
     evt.preventDefault();
-    if (!username) {
-      return setError("Username is required");
-    }
 
-    if (!password) {
-      return setError("Password is required");
-    }
+    console.log("Submitting Username:", username);
+    console.log("Submitting Password:", password);
+
+    if (!username) return setError("Username is required");
+    if (!password) return setError("Password is required");
 
     if (verifyCredentials(username, password)) {
-      // If we're here, we have a username and password.
-      // Store the username in our cookies.
       setCredentials(username, password);
-      // Catch our locked-out user and bail out
-      if (isLockedOutUser()) {
-        // Send an error with custom attributes to Backtrace
-        BacktraceClient.instance.send(
-          new Error("Locked out user tried to log in."),
-          { username }
-        );
-        return setError("Sorry, this user has been locked out.");
-      }
+      console.log("Stored Username after login:", currentUser());
 
-      // Redirect!
-      history.push(ROUTES.INVENTORY);
+      setTimeout(() => {
+        if (isLockedOutUser()) {
+          BacktraceClient.instance?.send(new Error("Locked out user tried to log in."), { username });
+          return setError("Sorry, this user has been locked out.");
+        }
+        navigate(ROUTES.INVENTORY);
+      }, 100);
     } else {
-      // Send an error with custom attributes to Backtrace
-      BacktraceClient.instance.send(
-        "Someone tried to login with invalid credentials.",
-        { username }
-      );
-      return setError(
-        "Username and password do not match any user in this service"
-      );
+      BacktraceClient.instance?.send(new Error("Invalid login attempt"), { username });
+      return setError("Username and password do not match any user in this service");
     }
-
-    return "";
-  };
-
-  const handleUserChange = (evt) => {
-    setUsername(evt.target.value);
-  };
-
-  const handlePassChange = (evt) => {
-    setPassword(evt.target.value);
   };
 
   return (
@@ -92,10 +80,18 @@ function Login(props) {
                   isError={Boolean(error)}
                   type={INPUT_TYPES.TEXT}
                   value={username}
-                  onChange={handleUserChange}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    setIsPrefilled((prev) => ({ ...prev, username: false }));
+                  }}
+                  onFocus={() => {
+                    if (isPrefilled.username) {
+                      setUsername("");
+                      setIsPrefilled((prev) => ({ ...prev, username: false }));
+                    }
+                  }}
                   testId="username"
                   placeholder="Username"
-                  // Custom
                   id="user-name"
                   name="user-name"
                   autoCorrect="off"
@@ -103,12 +99,20 @@ function Login(props) {
                 />
                 <InputError
                   isError={Boolean(error)}
-                  type={INPUT_TYPES.PASSWORD}
+                  type={INPUT_TYPES.TEXT} // Changed from password to text
                   value={password}
-                  onChange={handlePassChange}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setIsPrefilled((prev) => ({ ...prev, password: false }));
+                  }}
+                  onFocus={() => {
+                    if (isPrefilled.password) {
+                      setPassword("");
+                      setIsPrefilled((prev) => ({ ...prev, password: false }));
+                    }
+                  }}
                   testId="password"
                   placeholder="Password"
-                  // Custom
                   autoCorrect="off"
                   autoCapitalize="none"
                 />
@@ -117,33 +121,17 @@ function Login(props) {
                   errorMessage={`Epic sadface: ${error}`}
                   onClick={dismissError}
                 />
-                <SubmitButton
-                  // `btn_action` has no style function
-                  // but is there for backwards compatibility
-                  customClass="btn_action"
-                  testId="login-button"
-                  value="Login"
-                />
+                <SubmitButton customClass="btn_action" testId="login-button" value="Login" />
               </form>
             </div>
           </div>
         </div>
-        <div
-          className="login_credentials_wrap"
-          data-test="login-credentials-container"
-        >
+        <div className="login_credentials_wrap" data-test="login-credentials-container">
           <div className="login_credentials_wrap-inner">
-            <div
-              id="login_credentials"
-              className="login_credentials"
-              data-test="login-credentials"
-            >
+            <div className="login_credentials" data-test="login-credentials">
               <h4>Accepted usernames are:</h4>
               {VALID_USERNAMES.map((u, i) => (
-                <Fragment key={i}>
-                  {u}
-                  <br />
-                </Fragment>
+                <Fragment key={i}>{u}<br /></Fragment>
               ))}
             </div>
             <div className="login_password" data-test="login-password">
@@ -157,4 +145,4 @@ function Login(props) {
   );
 }
 
-export default withRouter(Login);
+export default Login;

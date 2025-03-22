@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { isProblemUser } from "../utils/Credentials";
 import { ROUTES } from "../utils/Constants";
@@ -7,11 +7,11 @@ import { ShoppingCart } from "../utils/shopping-cart";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "./Button";
 import "./CartItem.css";
 
-const CartItem = ({ item, history, showButton }) => {
+const CartItem = ({ item, showButton }) => {
   const [itemVisible, setItemVisible] = useState(true);
+  const navigate = useNavigate();
 
   if (!item) {
-    // Hide this if the item is invalid
     setItemVisible(false);
   }
 
@@ -32,23 +32,18 @@ const CartItem = ({ item, history, showButton }) => {
 
     return (
       <div className="cart_item" data-test="inventory-item">
-        <div className="cart_quantity" data-test="item-quantity">
-          1
-        </div>
+        <div className="cart_quantity" data-test="item-quantity">1</div>
         <div className="cart_item_label">
           <a
             href="#"
             id={`item_${id}_title_link`}
             onClick={(evt) => {
               evt.preventDefault();
-              history.push(itemLink);
+              navigate(itemLink);
             }}
             data-test={`item-${id}-title-link`}
           >
-            <div
-              className="inventory_item_name"
-              data-test="inventory-item-name"
-            >
+            <div className="inventory_item_name" data-test="inventory-item-name">
               {name}
             </div>
           </a>
@@ -56,10 +51,7 @@ const CartItem = ({ item, history, showButton }) => {
             {desc}
           </div>
           <div className="item_pricebar">
-            <div
-              className="inventory_item_price"
-              data-test="inventory-item-price"
-            >
+            <div className="inventory_item_price" data-test="inventory-item-price">
               ${price}
             </div>
             {showButton && (
@@ -80,6 +72,7 @@ const CartItem = ({ item, history, showButton }) => {
 
   return <div className="removed_cart_item" />;
 };
+
 CartItem.propTypes = {
   /**
    * The item
@@ -91,19 +84,14 @@ CartItem.propTypes = {
     price: PropTypes.number.isRequired,
   }),
   /**
-   * The history
-   */
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
-  }).isRequired,
-  /**
    * Show the remove button
    */
   showButton: PropTypes.bool,
 };
+
 CartItem.defaultProps = {
   item: undefined,
   showButton: false,
 };
 
-export default withRouter(CartItem);
+export default CartItem;
