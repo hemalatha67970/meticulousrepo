@@ -12,7 +12,7 @@ import HeaderContainer from "../components/HeaderContainer";
 import { sortAsc, sortDesc, sortHiLo, sortLoHi } from "../utils/Sorting";
 import Select from "../components/Select";
 import "./Inventory.css";
-import { BacktraceClient } from "@backtrace-labs/react";
+import { BacktraceClient } from "@backtrace/react";
 
 const Inventory = ({ data }) => {
   const navigate = useNavigate(); // Use navigate if you need routing
@@ -43,11 +43,11 @@ const Inventory = ({ data }) => {
   const sortByOption = (event) => {
     if (isProblemUser()) {
       return;
-    } else if (isErrorUser()) {
-      BacktraceClient.instance.send("Sorting is broken!", {
-        sortOption: event.target.value,
-        InventoryData,
-      });
+    // } else if (isErrorUser()) {
+    //  BacktraceClient.instance.send("Sorting is broken!", {
+    //     sortOption: event.target.value,
+    //     InventoryData,
+    //   });
       return alert("Sorting is broken! This error has been reported to Backtrace.");
     }
 
