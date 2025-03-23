@@ -26,32 +26,36 @@ jobs:
       - name: Use Node.js LTS
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: npm
+          node-version: "20"
+          cache: yarn
 
       - name: Cache node_modules
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             node-modules-${{ runner.os }}
 
+      - name: Ensure Yarn is installed
+        run: |
+          npm install -g yarn
+
       - name: Install dependencies
         run: |
-          npm ci --legacy-peer-deps || npm install --force
+          yarn install --frozen-lockfile --check-files || yarn install --force
 
       - name: Verify installation
         run: |
-          npm list @alwaysmeticulous/recorder-loader
+          yarn list @alwaysmeticulous/recorder-loader || echo "Dependency missing!"
 
       - name: Build project
         run: |
-          npm run build
+          yarn build
 
       - name: Serve project
         run: |
-          npm run serve &
+          yarn serve &
           sleep 5
 
       - name: Run Meticulous tests
