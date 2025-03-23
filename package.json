@@ -4,7 +4,6 @@
   "version": "3.0.0",
   "private": true,
   "dependencies": {
-    "@alwaysmeticulous/recorder-loader": "^2.208.0",
     "@backtrace-labs/react": "^0.0.5",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
