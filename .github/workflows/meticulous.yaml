@@ -27,13 +27,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20"
-          cache: yarn
+          cache: npm
 
       - name: Clean Yarn Cache
-        run: yarn cache clean
+        run: npm cache clean --force
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --prefer-offline --frozen-lockfile
 
       - name: Build project
         run: yarn build
@@ -41,7 +41,14 @@ jobs:
       - name: Serve project
         run: |
           yarn serve & 
-          sleep 5
+          for i in {1..15}; do 
+            if curl --output /dev/null --silent --head --fail "http://localhost:3000"; then
+              echo "Server is up!"
+              break
+            fi
+            echo "Waiting for server..."
+            sleep 2
+          done
 
       - name: Run Meticulous tests
         uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
