@@ -41,9 +41,12 @@ jobs:
         run: |
           npm install -g yarn
 
+      - name: Clear Cache  # Point 6 added here
+        run: rm -rf node_modules yarn.lock package-lock.json
+
       - name: Install dependencies
         run: |
-          yarn install --frozen-lockfile --check-files || yarn install --force
+          yarn install --force
 
       - name: Verify installation
         run: |
