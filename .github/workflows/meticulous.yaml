@@ -23,42 +23,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18
+      - name: Use Node.js 20
         uses: actions/setup-node@v3
         with:
-          node-version: "28"
+          node-version: "20"
           cache: yarn
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}
+      - name: Clean Yarn Cache
+        run: yarn cache clean
 
-      - name: Ensure Yarn is installed
-        run: |
-          npm install -g yarn
-
-      - name: Clear Cache  # Point 6 added here
-        run: rm -rf node_modules yarn.lock package-lock.json
-
-      - name: Install dependencies
-        run: |
-          yarn install --force
-
-      - name: Verify installation
-        run: |
-          yarn list @alwaysmeticulous/recorder-loader || echo "Dependency missing!"
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Build project
-        run: |
-          yarn build
+        run: yarn build
 
       - name: Serve project
         run: |
-          yarn serve &
+          yarn serve & 
           sleep 5
 
       - name: Run Meticulous tests

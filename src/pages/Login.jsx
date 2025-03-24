@@ -11,7 +11,7 @@ import { ROUTES, VALID_USERNAMES, VALID_PASSWORD } from "../utils/Constants";
 import InputError, { INPUT_TYPES } from "../components/InputError";
 import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";
-import { BacktraceClient } from "@backtrace/react";
+//import { BacktraceClient } from "@backtrace/react";
 
 function Login({ simulatedUsername = "", simulatedPassword = "" }) {
   const navigate = useNavigate();
@@ -56,13 +56,13 @@ function Login({ simulatedUsername = "", simulatedPassword = "" }) {
 
       setTimeout(() => {
         if (isLockedOutUser()) {
-          BacktraceClient.instance?.send(new Error("Locked out user tried to log in."), { username });
+//          BacktraceClient.instance?.send(new Error("Locked out user tried to log in."), { username });
           return setError("Sorry, this user has been locked out.");
         }
         navigate(ROUTES.INVENTORY);
       }, 100);
     } else {
-      BacktraceClient.instance?.send(new Error("Invalid login attempt"), { username });
+ //     BacktraceClient.instance?.send(new Error("Invalid login attempt"), { username });
       return setError("Username and password do not match any user in this service");
     }
   };
