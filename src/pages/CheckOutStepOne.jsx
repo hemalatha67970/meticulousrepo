@@ -10,7 +10,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import SubmitButton from "../components/SubmitButton";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "../components/Button";
 import "./CheckOutStepOne.css";
-
+import Backtrace from "@backtrace/react";
 const CheckOutStepOne = () => {
   const navigate = useNavigate(); // Replaces history.push
   const [firstName, setFirstName] = useState("");

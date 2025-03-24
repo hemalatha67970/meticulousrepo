@@ -10,6 +10,7 @@ import SwagLabsFooter from "../components/Footer";
 import HeaderContainer from "../components/HeaderContainer";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "../components/Button";
 import "./CheckOutStepTwo.css";
+import Backtrace from "@backtrace/react";
 
 const CheckOutStepTwo = () => {
   const navigate = useNavigate();  // Replace history with useNavigate()

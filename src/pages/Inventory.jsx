@@ -12,7 +12,8 @@ import HeaderContainer from "../components/HeaderContainer";
 import { sortAsc, sortDesc, sortHiLo, sortLoHi } from "../utils/Sorting";
 import Select from "../components/Select";
 import "./Inventory.css";
-import { BacktraceClient } from "@backtrace/react";
+//import { BacktraceClient } from "@backtrace/react";
+import Backtrace from "@backtrace/react";
 
 const Inventory = ({ data }) => {
   const navigate = useNavigate(); // Use navigate if you need routing

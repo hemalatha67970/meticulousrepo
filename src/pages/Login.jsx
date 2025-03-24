@@ -11,6 +11,8 @@ import { ROUTES, VALID_USERNAMES, VALID_PASSWORD } from "../utils/Constants";
 import InputError, { INPUT_TYPES } from "../components/InputError";
 import SubmitButton from "../components/SubmitButton";
 import ErrorMessage from "../components/ErrorMessage";
+import Backtrace from "@backtrace/react";
+
 //import { BacktraceClient } from "@backtrace/react";
 
 function Login({ simulatedUsername = "", simulatedPassword = "" }) {

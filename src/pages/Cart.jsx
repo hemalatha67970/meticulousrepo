@@ -9,6 +9,7 @@ import HeaderContainer from "../components/HeaderContainer";
 import Button, { BUTTON_SIZES, BUTTON_TYPES } from "../components/Button";
 import "./Cart.css";
 import { isVisualUser } from "../utils/Credentials";
+import Backtrace from "@backtrace/react";
 
 const Cart = () => {
   const navigate = useNavigate(); // Replaces history.push
