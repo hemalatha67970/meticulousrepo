@@ -1240,14 +1240,6 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@backtrace-labs/browser@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@backtrace-labs/browser/-/browser-0.0.5.tgz#042aafb9209afce852268fde42396864ce4f30d3"
-  integrity sha512-p8QJIGSgRZpgG36aRyVo2SbKfjAxmjnh8LvNtfwhZPZVW9un9LDy3OAFy03+O6vDc0RSw1utL/oKT71+9SouPw==
-  dependencies:
-    "@backtrace-labs/sdk-core" "^0.0.5"
-    ua-parser-js "^1.0.35"
-
 "@backtrace-labs/javascript-cli@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@backtrace-labs/javascript-cli/-/javascript-cli-0.1.2.tgz#ef24e73964d8c0dd84886dc85f9e87752c9c2cc8"
@@ -1258,19 +1250,6 @@
     command-line-usage "^7.0.1"
     glob "^10.3.3"
     jsonc "^2.0.0"
-
-"@backtrace-labs/react@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@backtrace-labs/react/-/react-0.0.5.tgz#be1bbd8d776c0cc6cc37411eb0781793c9854fe4"
-  integrity sha512-CsWgp9tJLVbimCv/Q70r9k1cqrsrDRpg0L6o/Xbf2KC2oEnGXdC2On/AAnHGpmbREfU5/kdrrEhDuRqM4htiPw==
-  dependencies:
-    "@backtrace-labs/browser" "^0.0.5"
-    "@backtrace-labs/sdk-core" "^0.0.5"
-
-"@backtrace-labs/sdk-core@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@backtrace-labs/sdk-core/-/sdk-core-0.0.5.tgz#4fe39af072e31c9ccda5d88b0fd4b33d789c59f4"
-  integrity sha512-dyMTTANxdXdKtRIHwd9RyOBP3Ow11IwdNkqRwfIHgjCjIIXeNp+za079nsMdIPS+0b137s11WkvCXlhVDJW0Cw==
 
 "@backtrace-labs/sourcemap-tools@^0.1.0":
   version "0.1.0"
@@ -18855,7 +18834,7 @@ typical@^7.1.1:
   resolved "https://registry.yarnpkg.com/typical/-/typical-7.3.0.tgz#930376be344228709f134613911fa22aa09617a4"
   integrity sha512-ya4mg/30vm+DOWfBg4YK3j2WD6TWtRkCbasOJr40CseYENzCUby/7rIvXA99JGsQHeNxLbnXdyLLxKSv3tauFw==
 
-ua-parser-js@^1.0.1, ua-parser-js@^1.0.35:
+ua-parser-js@^1.0.1:
   version "1.0.40"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-1.0.40.tgz#ac6aff4fd8ea3e794a6aa743ec9c2fc29e75b675"
   integrity sha512-z6PJ8Lml+v3ichVojCiB8toQJBuwR42ySM4ezjXIqXK3M0HczmKQ3LF4rhU55PfD99KEEXQG6yb7iOMyvYuHew==
