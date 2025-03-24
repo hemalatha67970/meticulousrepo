@@ -44,8 +44,9 @@ jobs:
         run: |
           yarn install --non-interactive
 
-      - name: Build project
+      - name: Build project with OpenSSL legacy provider
         run: |
+          export NODE_OPTIONS=--openssl-legacy-provider
           yarn build
 
       - name: Serve project
