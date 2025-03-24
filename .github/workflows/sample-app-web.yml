@@ -1,59 +1,57 @@
-name: Swag Labs Sample App Workflow
+name: Meticulous
 
 on:
   push:
     branches:
       - main
-  pull_request:
+  pull_request: {}
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+  statuses: read
 
 jobs:
-  build:
+  test:
+    name: Report diffs
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
-    env:
-      BUILD_PREFIX: true
-      IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
-      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-      SCREENER_API_KEY: ${{ secrets.SCREENER_API_KEY }}
-
-    strategy:
-      matrix:
-        node-version: [18.x]  # Change to Node.js 18.x
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: yarn
 
-    # Site Testing steps
-    - name: Install dependencies
-      run: npm ci
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}
 
-    - name: Build
-      run: CI=false npm run build
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile --non-interactive
 
-    - name: Run Unit Tests and generate coverage report
-      run: npm run test.coverage
+      - name: Build project
+        run: |
+          yarn build
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Serve project
+        run: |
+          yarn serve &
+          sleep 5  # Sleep to ensure the app is fully served
 
-    # Only run the last 2 steps when we are not on the main branch
-    - name: Run Storybook tests
-      if: ${{ !env.IS_MAIN }}
-      run: npm run test.storybook.ci
-
-    - name: Run Meticulous Visual Regression Tests
-      if: ${{ !env.IS_MAIN }}
-      run: |
-        curl -sSL https://install.meticulous.ai | bash
-        meticulous --project-key ${{ secrets.METICULOUS_PROJECT_KEY }} --api-key ${{ secrets.METICULOUS_API_KEY }} run --url http://localhost:3000
+      - name: Run Meticulous tests
+        uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
+        with:
+          api-token: ${{ secrets.METICULOUS_API_TOKEN }}
+          app-url: "http://localhost:3000/"  # Replace with your app's URL
