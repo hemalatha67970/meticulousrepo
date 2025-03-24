@@ -1,13 +1,9 @@
-name: github pages release
+name: GitHub Pages Release
 
 on:
   push:
     branches:
       - main
-#     paths:
-#       - '.storybook'
-#       - 'public'
-#       - 'src'
 
 jobs:
   deploy:
@@ -16,31 +12,33 @@ jobs:
       run:
         working-directory: ./
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Build
+      - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: |
+          npm ci  # or npm install, depending on your preference
 
       - name: Build site
         env:
           CI: false
         run: |
-          ls
-          npm ci
           npm run build
 
-      - name: Build storybook
+      - name: Build Storybook
         env:
           CI: false
         run: |
-          ls
           npm run build.storybook
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          publish_dir: ./build  # Or adjust if Storybook build uses a different folder like `storybook-static`
           cname: www.saucedemo.com
