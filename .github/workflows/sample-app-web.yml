@@ -48,12 +48,13 @@ jobs:
         run: |
           export NODE_OPTIONS=--openssl-legacy-provider
           yarn build
-
-      - name: Serve project
+      
+      - name: Start server
         run: |
-          yarn serve &
-          sleep 15  # Sleep to ensure the app is fully served
-
+          yarn serve --host 0.0.0.0 --port 3000 &
+          echo $! > server.pid  # Save process ID
+          sleep 40  # Ensure server is fully started
+        
       - name: Run Meticulous tests
         uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
         with:
