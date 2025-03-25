@@ -72,7 +72,9 @@ jobs:
           meticulous run-all-tests \
           --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
           --appUrl="http://localhost:3000/" \
-          --noSandbox  # ✅ Correct flag
+          --headless \
+          --noSandbox \
+          --chromiumFlags="--disable-gpu --disable-software-rasterizer"
 
       - name: Stop server
         run: |
