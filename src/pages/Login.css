@@ -1,6 +1,6 @@
 /* Main Container */
 .login_container {
-  background-color: #e7ecea;
+  background-color: #f0f4f8; /* Light gray background */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -21,7 +21,7 @@
   justify-content: center;
   align-items: center;
   width: 100%;
-  color: #333;
+  color: #2d3748; /* Darker gray */
 }
 
 /* Wrapper for the login form */
@@ -33,13 +33,13 @@
 
 /* Inner Wrapper for Form Section */
 .login_wrapper-inner {
-  background-color: #27986b;
+  background-color: #3182ce; /* Light blue background */
   border-radius: 8px 8px 0 0;
   padding: 30px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
-  border: 1px solid #ededed;
+  border: 1px solid #d1d5db; /* Light gray border */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -50,12 +50,12 @@
 }
 
 .login_credentials_wrap-inner {
-  background-color: #e7ecea;
+  background-color: #edf2f7; /* Very light gray */
   padding: 20px 30px;
   border-radius: 0 0 8px 8px;
   text-align: center;
   word-break: break-word;
-  color: #333;
+  color: #2d3748; /* Dark gray text color */
 }
 
 /* Form Input Columns */
