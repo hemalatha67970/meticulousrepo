@@ -28,7 +28,7 @@
 
 /* Form Section */
 .login_wrapper-inner {
-  background-color: #322798;
+  background-color: #27986b;
   border-radius: 8px 8px 0 0;
   padding: 20px 30px;
   display: grid;
@@ -45,7 +45,7 @@
 }
 
 .login_credentials_wrap-inner {
-  background-color: #132322;
+  background-color:#e7ecea;
   padding: 20px 30px;
   border-radius: 0 0 8px 8px;
   text-align: center;
