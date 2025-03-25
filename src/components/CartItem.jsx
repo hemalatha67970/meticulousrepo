@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Removed useNavigate
 import PropTypes from "prop-types";
 import { isProblemUser } from "../utils/Credentials";
 import { ROUTES } from "../utils/Constants";
@@ -9,7 +9,6 @@ import "./CartItem.css";
 
 const CartItem = ({ item, showButton }) => {
   const [itemVisible, setItemVisible] = useState(true);
-  const navigate = useNavigate();
 
   if (!item) {
     setItemVisible(false);
