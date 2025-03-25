@@ -52,7 +52,7 @@ jobs:
       - name: Serve project
         run: |
           yarn serve &
-          sleep 5  # Sleep to ensure the app is fully served
+          sleep 15  # Sleep to ensure the app is fully served
 
       - name: Run Meticulous tests
         uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
