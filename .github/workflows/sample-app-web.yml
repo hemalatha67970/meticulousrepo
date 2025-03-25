@@ -73,7 +73,7 @@ jobs:
             --appUrl="http://localhost:3000/" \
             --headless \
             --noSandbox \
-            --baselineBranch=baseline-branch  # Specify baseline branch
+            --baseCommitSha=229d6e9
 
       - name: Stop server
         run: |
