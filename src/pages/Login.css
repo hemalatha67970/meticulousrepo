@@ -1,46 +1,46 @@
 /* Main Container */
 .login_container {
-  background-color: #e7ecea;
+  background-color: #f0f0f0; /* Changed background color */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 20px;
+  padding: 25px; /* Increased padding */
 }
 
 /* Logo Section */
 .login_logo {
   font-family: 'DM Mono', sans-serif;
-  font-size: 28px;
-  line-height: 48px;
+  font-size: 32px; /* Increased font size */
+  line-height: 50px; /* Increased line height */
   text-align: center;
-  padding: 30px 0;
+  padding: 35px 0; /* Increased padding */
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  color: #333;
+  color: #4a4a4a; /* Changed text color */
 }
 
 /* Wrapper for the login form */
 .login_wrapper {
   width: 100%;
-  max-width: 800px;
+  max-width: 850px; /* Increased width */
   margin: 0 auto;
 }
 
 /* Inner Wrapper for Form Section */
 .login_wrapper-inner {
-  background-color: #27986b;
-  border-radius: 8px 8px 0 0;
-  padding: 30px;
+  background-color: #1f8b57; /* Changed background color */
+  border-radius: 10px 10px 0 0; /* Increased border radius */
+  padding: 35px; /* Increased padding */
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  border: 1px solid #ededed;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Slight change in grid layout */
+  gap: 25px; /* Increased gap */
+  border: 1px solid #dcdcdc; /* Lighter border color */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15); /* Increased shadow */
 }
 
 /* Credentials Section */
@@ -50,19 +50,19 @@
 }
 
 .login_credentials_wrap-inner {
-  background-color: #e7ecea;
-  padding: 20px 30px;
-  border-radius: 0 0 8px 8px;
+  background-color: #f0f0f0; /* Changed background color */
+  padding: 25px 35px; /* Increased padding */
+  border-radius: 0 0 10px 10px; /* Increased border radius */
   text-align: center;
   word-break: break-word;
-  color: #333;
+  color: #4a4a4a; /* Changed text color */
 }
 
 /* Form Input Columns */
 .form_column {
   width: 100%;
-  max-width: 292px;
-  padding-top: 20px;
+  max-width: 300px; /* Increased max width */
+  padding-top: 25px; /* Increased padding */
   margin: 0 auto;
 }
 
@@ -73,29 +73,29 @@
   }
 
   .login_wrapper-inner {
-    padding: 20px;
+    padding: 25px; /* Increased padding */
   }
 }
 
 @media only screen and (max-width: 600px) {
   .login_logo {
-    font-size: 24px;
-    padding: 20px 0;
+    font-size: 28px; /* Increased font size */
+    padding: 25px 0; /* Increased padding */
   }
 
   .login_wrapper-inner {
-    padding: 15px;
+    padding: 20px; /* Increased padding */
   }
 }
 
 @media only screen and (max-width: 400px) {
   .login_wrapper-inner,
   .login_credentials_wrap-inner {
-    width: 90%;
-    padding: 15px;
+    width: 95%; /* Increased width */
+    padding: 20px; /* Increased padding */
   }
 
   .form_column {
-    padding-top: 15px;
+    padding-top: 20px; /* Increased padding */
   }
 }

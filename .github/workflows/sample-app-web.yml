@@ -73,8 +73,7 @@ jobs:
             --appUrl="http://localhost:3000/" \
             --headless \
             --noSandbox \
-            --baseTestRunId=229d6e9b1a7df9cf9ed0879f5350641bbc5469fc
-
+            --baseTestRunId=pzbhtz87tCrp8kpHMTPKjPhT9G
       - name: Stop server
         run: |
           kill $(cat server.pid) || true
