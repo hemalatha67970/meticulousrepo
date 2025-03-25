@@ -29,7 +29,7 @@ jobs:
           node-version: "18.x"
           cache: yarn
 
-      - name: Set OpenSSL Legacy Provider
+      - name: Set NODE_OPTIONS for OpenSSL legacy provider
         run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
       - name: Cache node_modules
@@ -41,30 +41,21 @@ jobs:
             node-modules-${{ runner.os }}
 
       - name: Install dependencies
-        run: yarn install --non-interactive
-
-      - name: Build project
-        run: yarn build
-
-      - name: Start server
         run: |
-          yarn serve --host 0.0.0.0 &
-          echo $! > server.pid  # Save the process ID
-          sleep 30  # Ensure server is fully started
+          yarn install --non-interactive
 
-      - name: Verify server is running
-        run: curl --retry 5 --retry-delay 5 --retry-connrefused -I http://localhost:3000
+      - name: Build project with OpenSSL legacy provider
+        run: |
+          export NODE_OPTIONS=--openssl-legacy-provider
+          yarn build
+
+      - name: Serve project
+        run: |
+          yarn serve &
+          sleep 15  # Sleep to ensure the app is fully served
 
       - name: Run Meticulous tests
         uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
-          app-url: "http://localhost:3000"
-
-      - name: Stop server (Cleanup)
-        if: always()
-        run: |
-          if [ -f server.pid ]; then
-            kill $(cat server.pid) || true  # Kill the server process
-            rm server.pid  # Remove the PID file
-          fi
+          app-url: "http://localhost:3000/"  # Replace with your app's URL
