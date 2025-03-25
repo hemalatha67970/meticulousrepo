@@ -10,7 +10,7 @@ import SwagLabsFooter from "../components/Footer";
 import "./InventoryItem.css";
 import BrokenComponent from "../components/BrokenComponent";
 import { ErrorBoundary } from "@backtrace/react";
-import Backtrace from "@backtrace/react";
+
 
 const InventoryItem = () => {
   useEffect(() => {

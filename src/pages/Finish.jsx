@@ -6,7 +6,6 @@ import HeaderContainer from "../components/HeaderContainer";
 import Button, { BUTTON_SIZES } from "../components/Button";
 import { ROUTES } from "../utils/Constants";
 import "./Finish.css";
-import Backtrace from "@backtrace/react";
 
 const Finish = () => {
   const navigate = useNavigate(); // Replace history with useNavigate
