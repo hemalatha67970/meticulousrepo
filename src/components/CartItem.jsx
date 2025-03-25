@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { isProblemUser } from "../utils/Credentials";
 import { ROUTES } from "../utils/Constants";
@@ -34,19 +34,16 @@ const CartItem = ({ item, showButton }) => {
       <div className="cart_item" data-test="inventory-item">
         <div className="cart_quantity" data-test="item-quantity">1</div>
         <div className="cart_item_label">
-          <a
-            href="#"
+          <Link
+            to={itemLink}
             id={`item_${id}_title_link`}
-            onClick={(evt) => {
-              evt.preventDefault();
-              navigate(itemLink);
-            }}
             data-test={`item-${id}-title-link`}
+            className="inventory_item_link"
           >
             <div className="inventory_item_name" data-test="inventory-item-name">
               {name}
             </div>
-          </a>
+          </Link>
           <div className="inventory_item_desc" data-test="inventory-item-desc">
             {desc}
           </div>
