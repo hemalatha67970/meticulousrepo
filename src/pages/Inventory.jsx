@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Use navigate if needed
 import {
   isPerformanceGlitchUser,
   isProblemUser,
