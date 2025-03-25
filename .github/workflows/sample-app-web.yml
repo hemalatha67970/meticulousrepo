@@ -51,23 +51,9 @@ jobs:
 
       - name: Start server in background
         run: |
-          yarn serve -s build -l 3000 > server.log 2>&1 &
-          echo $! > server.pid  # Save process ID
-          sleep 5  # Give it some time to start
-
-      - name: Wait for server to be ready (Max 60s)
-        run: |
-          for i in {1..12}; do  # 12 attempts (each 5s)
-            if curl -s http://localhost:3000/ > /dev/null; then
-              echo "Server is ready!"
-              exit 0
-            fi
-            echo "Waiting for server to be ready..."
-            sleep 5
-          done
-          echo "Server failed to start!"
-          exit 1  # Fail if server doesn't start
-
+          yarn global add serve 
+          serve -s build -l 3000 
+       
       - name: Run Meticulous Visual Tests
         run: |
           npx @alwaysmeticulous/cli simulate \
