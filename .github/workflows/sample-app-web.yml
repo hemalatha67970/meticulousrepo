@@ -1,9 +1,8 @@
-name: Meticulous Visual Testing
-
 on:
   push:
     branches:
       - main
+      - baseline-branch  # Add baseline-branch if you need to trigger for that branch too
   pull_request: {}
   workflow_dispatch: {}
 
@@ -70,10 +69,11 @@ jobs:
       - name: Run Meticulous Visual Tests
         run: |
           meticulous run-all-tests \
-          --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
-          --appUrl="http://localhost:3000/" \
-          --headless \
-          --noSandbox
+            --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
+            --appUrl="http://localhost:3000/" \
+            --headless \
+            --noSandbox \
+            --baselineBranch=baseline-branch  # Specify baseline branch
 
       - name: Stop server
         run: |
