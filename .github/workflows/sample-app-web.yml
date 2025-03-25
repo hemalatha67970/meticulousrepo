@@ -42,9 +42,9 @@ jobs:
 
       - name: Install dependencies
         run: |
-          yarn install --non-interactive
+          yarn install --frozen-lockfile --non-interactive
 
-      - name: Build project with OpenSSL legacy provider
+      - name: Build project
         run: |
           export NODE_OPTIONS=--openssl-legacy-provider
           yarn build
@@ -73,8 +73,7 @@ jobs:
           --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
           --appUrl="http://localhost:3000/" \
           --headless \
-          --noSandbox \
-          --chromiumFlags="--disable-gpu --disable-software-rasterizer"
+          --noSandbox
 
       - name: Stop server
         run: |
