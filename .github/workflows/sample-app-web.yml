@@ -29,7 +29,7 @@ jobs:
           node-version: "18.x"
           cache: yarn
 
-      - name: Set NODE_OPTIONS for OpenSSL legacy provider
+      - name: Set NODE_OPTIONS
         run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
       - name: Cache node_modules
