@@ -1,4 +1,4 @@
-name: Meticulous
+name: Meticulous Visual Testing
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   test:
-    name: Report diffs
+    name: Capture Visual Snapshots
     runs-on: ubuntu-latest
 
     steps:
@@ -48,15 +48,33 @@ jobs:
         run: |
           export NODE_OPTIONS=--openssl-legacy-provider
           yarn build
-      
-      - name: Start server
+
+      - name: Start server in background
         run: |
-          yarn serve --host 0.0.0.0 --port 3000 &
+          yarn serve -s build -l 3000 > server.log 2>&1 &
           echo $! > server.pid  # Save process ID
-          sleep 40  # Ensure server is fully started
-        
-      - name: Run Meticulous tests
-        uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
-        with:
-          api-token: ${{ secrets.METICULOUS_API_TOKEN }}
-          app-url: "http://localhost:3000/"  # Replace with your app's URL
+          sleep 5  # Give it some time to start
+
+      - name: Wait for server to be ready (Max 60s)
+        run: |
+          for i in {1..12}; do  # 12 attempts (each 5s)
+            if curl -s http://localhost:3000/ > /dev/null; then
+              echo "Server is ready!"
+              exit 0
+            fi
+            echo "Waiting for server to be ready..."
+            sleep 5
+          done
+          echo "Server failed to start!"
+          exit 1  # Fail if server doesn't start
+
+      - name: Run Meticulous Visual Tests
+        run: |
+          npx @alwaysmeticulous/cli simulate \
+            --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
+            --appUrl="http://localhost:3000/" \
+            --sessionId="2025-03-22T05:42:04.322Z_11i4NpNsR-HxLD7EbxKQG"
+
+      - name: Stop server
+        run: |
+          kill $(cat server.pid) || true
