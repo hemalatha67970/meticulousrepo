@@ -73,7 +73,7 @@ jobs:
             --appUrl="http://localhost:3000/" \
             --headless \
             --noSandbox \
-            --baseCommitSha=229d6e9
+            --baseTestRunId=229d6e9b1a7df9cf9ed0879f5350641bbc5469fc
 
       - name: Stop server
         run: |
