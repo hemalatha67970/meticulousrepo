@@ -64,10 +64,11 @@ jobs:
 
       - name: Run Meticulous Visual Tests
         run: |
-          npx @alwaysmeticulous/cli simulate \
+            meticulous run-all-tests \
             --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
             --appUrl="http://localhost:3000/" \
-            --sessionId="2025-03-22T05:42:04.322Z_11i4NpNsR-HxLD7EbxKQG"
+            --chromiumFlags="--no-sandbox --disable-setuid-sandbox --disable-gpu"
+       
 
       - name: Stop server
         run: |
