@@ -60,15 +60,19 @@ jobs:
             curl --silent --fail http://localhost:3000 && break
             echo "Waiting for server to be ready..."
             sleep 5
-          done
+          done || (echo "Server failed to start!" && exit 1)
+
+      - name: Install Meticulous CLI
+        run: |
+          yarn global add @alwaysmeticulous/cli
+          echo "$(yarn global bin)" >> $GITHUB_PATH
 
       - name: Run Meticulous Visual Tests
         run: |
-            meticulous run-all-tests \
-            --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
-            --appUrl="http://localhost:3000/" \
-            --chromiumFlags="--no-sandbox --disable-setuid-sandbox --disable-gpu"
-       
+          meticulous run-all-tests \
+          --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
+          --appUrl="http://localhost:3000/" \
+          --chromiumFlags="--no-sandbox --disable-setuid-sandbox --disable-gpu"
 
       - name: Stop server
         run: |
