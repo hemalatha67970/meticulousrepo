@@ -41,22 +41,29 @@ jobs:
             node-modules-${{ runner.os }}
 
       - name: Install dependencies
-        run: |
-          yarn install --non-interactive
+        run: yarn install --non-interactive
 
-      - name: Build project with OpenSSL legacy provider
-        run: |
-          export NODE_OPTIONS=--openssl-legacy-provider
-          yarn build
+      - name: Build project
+        run: yarn build
 
-      - name: Serve project
+      - name: Start server
         run: |
-          yarn serve &
-          sleep 15  # Sleep to ensure the app is fully served
+          yarn serve --host 0.0.0.0 &
+          echo $! > server.pid  # Save the process ID
+          sleep 30  # Ensure server is fully started
 
-      - name: Run Meticulous tests  # <-- FIXED INDENTATION
+      - name: Verify server is running
+        run: curl --retry 5 --retry-delay 5 --retry-connrefused -I http://localhost:3000
+
+      - name: Run Meticulous tests
         uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
         with:
           api-token: ${{ secrets.METICULOUS_API_TOKEN }}
           app-url: "http://localhost:3000"
-          
+
+      - name: Stop server (Cleanup)
+        run: |
+          if [ -f server.pid ]; then
+            kill $(cat server.pid) || true  # Kill the server process
+            rm server.pid  # Remove the PID file
+          fi
