@@ -3,7 +3,7 @@ on:
     branches:
       - main
       - baseline-branch
-       - new-visual-branch
+      - new-visual-branch
   pull_request:
     branches:
       - main
