@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Use useNavigate instead of withRouter
 import {
-  isErrorUser,
   isPerformanceGlitchUser,
   isProblemUser,
   isVisualUser,
@@ -12,11 +10,8 @@ import HeaderContainer from "../components/HeaderContainer";
 import { sortAsc, sortDesc, sortHiLo, sortLoHi } from "../utils/Sorting";
 import Select from "../components/Select";
 import "./Inventory.css";
-import { BacktraceClient } from "@backtrace-labs/react";
 
 const Inventory = ({ data }) => {
-  const navigate = useNavigate(); // Use navigate if you need routing
-
   const InventoryData = data;
   const [inventoryList, setInventoryList] = useState(
     sortAsc(InventoryData, "name")
@@ -42,13 +37,7 @@ const Inventory = ({ data }) => {
   /* istanbul ignore next */
   const sortByOption = (event) => {
     if (isProblemUser()) {
-      return;
-    } else if (isErrorUser()) {
-      BacktraceClient.instance.send("Sorting is broken!", {
-        sortOption: event.target.value,
-        InventoryData,
-      });
-      return alert("Sorting is broken! This error has been reported to Backtrace.");
+      return alert("Sorting is broken! This error has been reported.");
     }
 
     setActiveOption(event.target.value);
@@ -91,34 +80,28 @@ const Inventory = ({ data }) => {
           }
         />
         <div id="inventory_container">
-          <div>
-            <div
-              id="inventory_container"
-              className="inventory_container"
-              data-test="inventory-container"
-            >
-              <div className="inventory_list" data-test="inventory-list">
-                {inventoryList.map((item, i) => {
-                  console.log("Item ID:", item.id, "Image URL:", item.image_url);
+          <div className="inventory_container" data-test="inventory-container">
+            <div className="inventory_list" data-test="inventory-list">
+              {inventoryList.map((item, i) => {
+                console.log("Item ID:", item.id, "Image URL:", item.image_url);
 
-                  return (
-                    <InventoryListItem
-                      key={item.id}
-                      id={item.id}
-                      image_url={
-                        isProblemUser() || (isVisualFailure && i === 0)
-                          ? "sl-404.jpg"
-                          : item.image_url
-                      }
-                      name={item.name}
-                      desc={item.desc}
-                      price={isVisualFailure ? randomPrice() : item.price}
-                      isTextAlignRight={isVisualFailure && i > 1 && i < 4}
-                      missAlignButton={isVisualFailure && i === 5}
-                    />
-                  );
-                })}
-              </div>
+                return (
+                  <InventoryListItem
+                    key={item.id}
+                    id={item.id}
+                    image_url={
+                      isProblemUser() || (isVisualFailure && i === 0)
+                        ? "sl-404.jpg"
+                        : item.image_url
+                    }
+                    name={item.name}
+                    desc={item.desc}
+                    price={isVisualFailure ? randomPrice() : item.price}
+                    isTextAlignRight={isVisualFailure && i > 1 && i < 4}
+                    missAlignButton={isVisualFailure && i === 5}
+                  />
+                );
+              })}
             </div>
           </div>
         </div>
@@ -128,4 +111,4 @@ const Inventory = ({ data }) => {
   );
 };
 
-export default Inventory; // No need for withRouter
+export default Inventory;

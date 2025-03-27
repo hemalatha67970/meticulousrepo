@@ -1,60 +1,79 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Swag Labs Sample App Workflow
-
 on:
   push:
     branches:
       - main
-  pull_request:
+      - baseline-branch  # Add baseline-branch if you need to trigger for that branch too
+  pull_request: {}
+  workflow_dispatch: {}
+
+permissions:
+  actions: write
+  contents: read
+  issues: write
+  pull-requests: write
+  statuses: read
 
 jobs:
-  build:
+  test:
+    name: Capture Visual Snapshots
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
-    env:
-      BUILD_PREFIX: true
-      IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
-      SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-      SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
-      SCREENER_API_KEY: ${{ secrets.SCREENER_API_KEY }}
-
-    strategy:
-      matrix:
-        node-version: [14.x]
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18.x"
+          cache: yarn
 
-    # Site Testing steps
-    - name: Install dependencies
-      run: npm ci
+      - name: Set NODE_OPTIONS for OpenSSL legacy provider
+        run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
 
-    - name: Build
-      run: CI=false npm run build
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}
 
-    - name: Run Unit Tests and generate coverage report
-      run: npm run test.coverage
+      - name: Install dependencies
+        run: |
+          yarn install --frozen-lockfile --non-interactive
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+      - name: Build project
+        run: |
+          export NODE_OPTIONS=--openssl-legacy-provider
+          yarn build
 
-    # Only run the last 2 steps when we are not on the main branch
-    - name: Run Storybook tests
-      if: ${{ !env.IS_MAIN }}
-      run: npm run test.storybook.ci
+      - name: Start server in background
+        run: |
+          yarn global add serve
+          serve -s build -l 3000 & echo $! > server.pid
 
-    - name: Build and E2E test the site
-      if: ${{ !env.IS_MAIN }}
-      run: npm run start & npx wait-on --timeout 60000 http://localhost:3000 && npm run test.e2e.sauce.us
+      - name: Wait for server to be ready
+        run: |
+          for i in {1..12}; do  
+            curl --silent --fail http://localhost:3000 && break
+            echo "Waiting for server to be ready..."
+            sleep 5
+          done || (echo "Server failed to start!" && exit 1)
+
+      - name: Install Meticulous CLI
+        run: |
+          yarn global add @alwaysmeticulous/cli
+          echo "$(yarn global bin)" >> $GITHUB_PATH
+
+      - name: Run Meticulous Visual Tests
+        run: |
+          meticulous run-all-tests \
+            --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
+            --appUrl="http://localhost:3000/" \
+            --headless \
+            --noSandbox \
+            --baseTestRunId=Pkm7WCBcGMRzfgtTd7Mdc8rNNt
+      - name: Stop server
+        run: |
+          kill $(cat server.pid) || true

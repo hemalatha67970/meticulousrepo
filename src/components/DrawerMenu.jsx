@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import { slide as Menu } from "react-burger-menu";
 import { ShoppingCart } from "../utils/shopping-cart";
 import { ROUTES } from "../utils/Constants";
@@ -20,7 +19,6 @@ const DrawerMenu = () => {
   const navigate = useNavigate();
 
   const resetStorage = () => {
-    // Wipe out our shopping cart now
     ShoppingCart.resetCart();
   };
 
@@ -50,22 +48,18 @@ const DrawerMenu = () => {
           data-test="close-menu"
         />
       }
-      outerContainerId={"page_wrapper"}
-      pageWrapId={"contents_wrapper"}
+      outerContainerId="page_wrapper"
+      pageWrapId="contents_wrapper"
       noOverlay
     >
-      <a
+      <button
         id="inventory_sidebar_link"
         className="menu-item"
-        href="#"
-        onClick={(evt) => {
-          evt.preventDefault();
-          navigate(ROUTES.INVENTORY);
-        }}
+        onClick={() => navigate(ROUTES.INVENTORY)}
         data-test="inventory-sidebar-link"
       >
         All Items
-      </a>
+      </button>
       <a
         id="about_sidebar_link"
         className="menu-item"
@@ -74,31 +68,25 @@ const DrawerMenu = () => {
       >
         About
       </a>
-      <a
+      <button
         id="logout_sidebar_link"
         className="menu-item"
-        href="#"
-        onClick={(evt) => {
-          evt.preventDefault();
+        onClick={() => {
           removeCredentials();
           navigate(ROUTES.LOGIN);
         }}
         data-test="logout-sidebar-link"
       >
         Logout
-      </a>
-      <a
+      </button>
+      <button
         id="reset_sidebar_link"
         className="menu-item"
-        href="#"
-        onClick={(evt) => {
-          evt.preventDefault();
-          resetStorage();
-        }}
+        onClick={resetStorage}
         data-test="reset-sidebar-link"
       >
         Reset App State
-      </a>
+      </button>
     </Menu>
   );
 };

@@ -9,13 +9,13 @@ jest.mock("react", () => ({
   useEffect: (f) => f(),
 }));
 
-jest.mock("@backtrace-labs/react", () => ({
-  BacktraceClient: {
-    instance: {
-      send: jest.fn(),
-    },
-  },
-}));
+// jest.mock("@backtrace-labs/react", () => ({
+//   BacktraceClient: {
+//     instance: {
+//       send: jest.fn(),
+//     },
+//   },
+// }));
 
 describe("Login", () => {
   const setState = jest.fn();

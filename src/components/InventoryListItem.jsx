@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Use `useNavigate` instead of `useHistory`
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { ShoppingCart } from "../utils/shopping-cart";
 import { isErrorUser, isProblemUser } from "../utils/Credentials";
@@ -16,7 +16,7 @@ const InventoryListItem = ({
   name,
   price,
 }) => {
-  const navigate = useNavigate(); // Use useNavigate hook
+  const navigate = useNavigate();
   const [itemInCart, setItemInCart] = useState(ShoppingCart.isItemInCart(id));
 
   const addToCart = (itemId) => {
@@ -51,34 +51,28 @@ const InventoryListItem = ({
   return (
     <div className="inventory_item" data-test="inventory-item">
       <div className="inventory_item_img">
-        <a
-          href="#"
+        <button
           id={`item_${id}_img_link`}
-          onClick={(e) => {
-            e.preventDefault();
-            navigate(itemLink); // Use navigate to change the route
-          }}
+          className="link-button"
+          onClick={() => navigate(itemLink)}
           data-test={`item-${id}-img-link`}
         >
           <img src={imagePath} alt={name} onError={(e) => (e.target.src = "/assets/img/default.jpg")} />
-        </a>
+        </button>
       </div>
 
       <div className="inventory_item_description" data-test="inventory-item-description">
         <div className="inventory_item_label">
-          <a
-            href="#"
+          <button
             id={`item_${id}_title_link`}
-            onClick={(e) => {
-              e.preventDefault();
-              navigate(itemLink); // Use navigate to change the route
-            }}
+            className="link-button"
+            onClick={() => navigate(itemLink)}
             data-test={`item-${id}-title-link`}
           >
             <div className={itemNameClass} data-test="inventory-item-name">
               {name}
             </div>
-          </a>
+          </button>
           <div className="inventory_item_desc" data-test="inventory-item-desc">
             {desc}
           </div>

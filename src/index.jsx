@@ -1,11 +1,9 @@
-// Needed to add the below due to issues in IE11, see this thread
-// https://github.com/facebook/create-react-app/issues/9906#issuecomment-720905753
 /** @jsxRuntime classic */
 import "react-app-polyfill/ie11";
 import "react-app-polyfill/stable";
-import { BacktraceClient, ErrorBoundary } from "@backtrace-labs/react";
+import { BacktraceClient, ErrorBoundary } from "@backtrace/react";
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import "./index.css";
@@ -22,20 +20,6 @@ import { currentUser } from "./utils/Credentials";
 import { ShoppingCart } from "./utils/shopping-cart";
 import { InventoryData } from "./utils/InventoryData.js";
 import { InventoryDataLong } from "./utils/InventoryDataLong.js";
-
-// Initialize Meticulous Recorder
-(async function startRecorder() {
-  try {
-    const { tryLoadAndStartRecorder } = await import("@alwaysmeticulous/recorder-loader");
-    await tryLoadAndStartRecorder({
-      recordingToken: "vyBbclZ59wHhyNBeK3UuJbmiLFz3NUVSIwBtbIuC",
-      isProduction: false,
-    });
-    console.log("Meticulous Recorder started successfully.");
-  } catch (error) {
-    console.error("Meticulous Recorder initialization failed:", error);
-  }
-})();
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -65,7 +49,7 @@ const App = () => {
   useEffect(() => {
     const passwordField = document.querySelector("input[type='password']");
     if (passwordField) {
-      passwordField.value="";
+      passwordField.value = "";
       passwordField.dispatchEvent(new Event("input", { bubbles: true }));
       passwordField.value = "secret_sauce";
       passwordField.dispatchEvent(new Event("input", { bubbles: true }));
@@ -97,7 +81,6 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<App />);
+ReactDOM.render(<App />, document.getElementById("root"));
 
 serviceWorkerRegistration.register();

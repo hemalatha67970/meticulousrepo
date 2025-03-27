@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-#     paths:
-#       - '.storybook'
-#       - 'public'
-#       - 'src'
 
 jobs:
   deploy:
@@ -18,16 +14,21 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build
+      - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '18.x'
+
+      - name: Clean node_modules and cache
+        run: |
+          rm -rf node_modules
+          rm package-lock.json
+          npm install
 
       - name: Build site
         env:
           CI: false
         run: |
-          ls
           npm ci
           npm run build
 
@@ -35,7 +36,6 @@ jobs:
         env:
           CI: false
         run: |
-          ls
           npm run build.storybook
 
       - name: Deploy
