@@ -80,3 +80,6 @@ storybook-static
 .tmp
 .eslintcache
 >>>>>>> bb36513 (added in new repo)
+
+# Local Netlify folder
+.netlify
