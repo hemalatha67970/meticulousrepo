@@ -2,10 +2,9 @@ on:
   push:
     branches:
       - main
-      - baseline-branch
-      - new-visual-branch
-  pull_request:
-    branches:
+      - baseline-branch  # Add baseline-branch if you need to trigger for that branch too
+  pull_request: 
+ branches:
       - main
       - baseline-branch
       - new-visual-branch
@@ -56,20 +55,15 @@ jobs:
       - name: Start server in background
         run: |
           yarn global add serve
-          nohup serve -s build -l 3000 & echo $! > server.pid
+          serve -s build -l 3000 & echo $! > server.pid
 
       - name: Wait for server to be ready
         run: |
           for i in {1..12}; do  
-            if curl --silent --fail http://localhost:3000; then
-              echo "Server is ready!"
-              exit 0
-            fi
+            curl --silent --fail http://localhost:3000 && break
             echo "Waiting for server to be ready..."
             sleep 5
-          done
-          echo "Server failed to start!"
-          exit 1
+          done || (echo "Server failed to start!" && exit 1)
 
       - name: Install Meticulous CLI
         run: |
@@ -77,19 +71,13 @@ jobs:
           echo "$(yarn global bin)" >> $GITHUB_PATH
 
       - name: Run Meticulous Visual Tests
-        env:
-          METICULOUS_API_TOKEN: ${{ secrets.METICULOUS_API_TOKEN }}
         run: |
-          if [ -z "$METICULOUS_API_TOKEN" ]; then
-            echo "Error: Meticulous API token is missing!"
-            exit 1
-          fi
           meticulous run-all-tests \
             --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
             --appUrl="http://localhost:3000/" \
             --headless \
-            --noSandbox
-
+            --noSandbox \
+            --baseTestRunId=Pkm7WCBcGMRzfgtTd7Mdc8rNNt
       - name: Stop server
         run: |
           kill $(cat server.pid) || true
