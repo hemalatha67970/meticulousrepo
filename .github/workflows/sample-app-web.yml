@@ -72,8 +72,7 @@ jobs:
           echo "$(yarn global bin)" >> $GITHUB_PATH
 
       - name: Run Meticulous Visual Tests
-        uses: alwaysmeticulous/report-diffs-action/cloud-compute@v1
-        with: |
+        run: |
           if [ -z "${{ secrets.METICULOUS_API_TOKEN }}" ]; then
             echo "Error: METICULOUS_API_TOKEN is not set. Exiting."
             exit 1
