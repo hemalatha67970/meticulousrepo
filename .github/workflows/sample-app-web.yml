@@ -2,7 +2,8 @@ on:
   push:
     branches:
       - main
-      - baseline-branch  # Add baseline-branch if you need to trigger for that branch too
+      - baseline-branch 
+      - new-visual-branch # Add baseline-branch if you need to trigger for that branch too
   pull_request: {}
   workflow_dispatch: {}
 
