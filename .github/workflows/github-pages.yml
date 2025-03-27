@@ -4,7 +4,13 @@ on:
   push:
     branches:
       - main
-
+      - baseline-branch
+      - new-visual-branch
+  pull_request:
+    branches:
+      - main
+      - baseline-branch
+      - new-visual-branch
 jobs:
   deploy:
     runs-on: ubuntu-latest
