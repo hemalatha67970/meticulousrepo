@@ -7,6 +7,25 @@
   resolved "https://registry.npmjs.org/@adobe/css-tools/-/css-tools-4.4.2.tgz"
   integrity sha512-baYZExFpsdkBNuvGKTKWCwKH57HRZLVtycZS05WTQNVOiXVSeAki3nU35zlRbToeMW8aHlJfyS+1C4BOv27q0A==
 
+"@alwaysmeticulous/api@^2.206.5":
+  version "2.206.5"
+  resolved "https://registry.npmjs.org/@alwaysmeticulous/api/-/api-2.206.5.tgz"
+  integrity sha512-rAxU8hKQJmoPs6bx1vuyuk7OnSBwNm6NxpMAL6ewO9/q7ZBmES7nJQq1F96eLTMqnUsj93+gBDa/5TEfJBF7cw==
+
+"@alwaysmeticulous/recorder-loader@^2.208.0":
+  version "2.208.0"
+  resolved "https://registry.yarnpkg.com/@alwaysmeticulous/recorder-loader/-/recorder-loader-2.208.0.tgz#37874b7f17b34e928c56ba82cfb7c7dcb741b404"
+  integrity sha512-VuI5l/z86J6jaTH/JAI+WbQ6Kb+Oxh4c9z0ETTa47pZ4ftSE2/mgKMFXxVDIVGPgnZQmK9ZUhfHWWjEQ/Qwfjg==
+  dependencies:
+    "@alwaysmeticulous/sdk-bundles-api" "^2.208.0"
+
+"@alwaysmeticulous/sdk-bundles-api@^2.208.0":
+  version "2.208.0"
+  resolved "https://registry.npmjs.org/@alwaysmeticulous/sdk-bundles-api/-/sdk-bundles-api-2.208.0.tgz"
+  integrity sha512-kTxqcmJ8p8OpuJfBaDQa1ZArFUH5w4+jvKbBW7dBApVJIfwK1O8FweO8RtEAdLpinTilKUbnUSsNWG5V4ye1iw==
+  dependencies:
+    "@alwaysmeticulous/api" "^2.206.5"
+
 "@ampproject/remapping@^2.2.0":
   version "2.3.0"
   resolved "https://registry.npmjs.org/@ampproject/remapping/-/remapping-2.3.0.tgz"
@@ -8296,7 +8315,7 @@ endent@^2.0.1:
     fast-json-parse "^1.0.3"
     objectorarray "^1.0.5"
 
-enhanced-resolve@^4.3.0, enhanced-resolve@^4.5.0:
+enhanced-resolve@^4.3.0:
   version "4.5.0"
   resolved "https://registry.npmjs.org/enhanced-resolve/-/enhanced-resolve-4.5.0.tgz"
   integrity sha512-Nv9m36S/vxpsI+Hc4/ZGRs0n9mXqSWGGq49zxb/cJfPAQMbUtttJAlNPS4AQzaBdw/pKskw5bMbekT/Y7W/Wlg==
@@ -9839,7 +9858,7 @@ fsevents@^1.2.7:
 
 fsevents@^2.1.2, fsevents@^2.1.3, fsevents@^2.3.2, fsevents@~2.3.2:
   version "2.3.3"
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.2:
@@ -20009,36 +20028,7 @@ webpack-virtual-modules@^0.2.2:
   dependencies:
     debug "^3.0.0"
 
-webpack@4:
-  version "4.47.0"
-  resolved "https://registry.npmjs.org/webpack/-/webpack-4.47.0.tgz"
-  integrity sha512-td7fYwgLSrky3fI1EuU5cneU4+pbH6GgOfuKNS1tNPcfdGinGELAqsb/BP4nnvZyKSG2i/xFGU7+n2PvZA8HJQ==
-  dependencies:
-    "@webassemblyjs/ast" "1.9.0"
-    "@webassemblyjs/helper-module-context" "1.9.0"
-    "@webassemblyjs/wasm-edit" "1.9.0"
-    "@webassemblyjs/wasm-parser" "1.9.0"
-    acorn "^6.4.1"
-    ajv "^6.10.2"
-    ajv-keywords "^3.4.1"
-    chrome-trace-event "^1.0.2"
-    enhanced-resolve "^4.5.0"
-    eslint-scope "^4.0.3"
-    json-parse-better-errors "^1.0.2"
-    loader-runner "^2.4.0"
-    loader-utils "^1.2.3"
-    memory-fs "^0.4.1"
-    micromatch "^3.1.10"
-    mkdirp "^0.5.3"
-    neo-async "^2.6.1"
-    node-libs-browser "^2.2.1"
-    schema-utils "^1.0.0"
-    tapable "^1.1.3"
-    terser-webpack-plugin "^1.4.3"
-    watchpack "^1.7.4"
-    webpack-sources "^1.4.1"
-
-webpack@4.44.2, "webpack@>=4.43.0 <6.0.0":
+webpack@4, webpack@4.44.2, "webpack@>=4.43.0 <6.0.0":
   version "4.44.2"
   resolved "https://registry.npmjs.org/webpack/-/webpack-4.44.2.tgz"
   integrity sha512-6KJVGlCxYdISyurpQ0IPTklv+DULv05rs2hseIXer6D7KrUicRDLFb4IUM1S6LUAKypPM/nSiVSuv8jHu1m3/Q==

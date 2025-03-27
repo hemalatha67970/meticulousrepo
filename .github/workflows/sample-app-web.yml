@@ -1,10 +1,13 @@
-name: Meticulous Visual Testing
-
 on:
   push:
     branches:
       - main
-  pull_request: {}
+      - baseline-branch
+  pull_request:
+    branches:
+      - main
+      - baseline-branch
+      - new-visual-branch
   workflow_dispatch: {}
 
 permissions:
@@ -69,11 +72,16 @@ jobs:
 
       - name: Run Meticulous Visual Tests
         run: |
+          if [ -z "${{ secrets.METICULOUS_API_TOKEN }}" ]; then
+            echo "Error: METICULOUS_API_TOKEN is not set. Exiting."
+            exit 1
+          fi
           meticulous run-all-tests \
-          --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
-          --appUrl="http://localhost:3000/" \
-          --headless \
-          --noSandbox
+            --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
+            --appUrl="http://localhost:3000/" \
+            --headless \
+            --noSandbox \
+            --baseTestRunId=Pkm7WCBcGMRzfgtTd7Mdc8rNNt
 
       - name: Stop server
         run: |
