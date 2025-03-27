@@ -9,8 +9,6 @@ on:
   pull_request:
     branches:
       - main
-      - baseline-branch
-      - new-visual-branch
 jobs:
   deploy:
     runs-on: ubuntu-latest

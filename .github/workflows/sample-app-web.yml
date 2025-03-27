@@ -1,10 +1,12 @@
+name: Capture Visual Snapshots with Meticulous
+
 on:
   push:
     branches:
       - main
-      - baseline-branch  # Add baseline-branch if you need to trigger for that branch too
-  pull_request: 
- branches:
+      - baseline-branch
+  pull_request:
+    branches:
       - main
       - baseline-branch
       - new-visual-branch
@@ -54,30 +56,40 @@ jobs:
 
       - name: Start server in background
         run: |
-          yarn global add serve
-          serve -s build -l 3000 & echo $! > server.pid
+          yarn add serve
+          nohup npx serve -s build -l 3000 & echo $! > server.pid
 
       - name: Wait for server to be ready
         run: |
           for i in {1..12}; do  
-            curl --silent --fail http://localhost:3000 && break
+            if curl --silent --fail http://localhost:3000; then
+              echo "Server is ready!"
+              exit 0
+            fi
             echo "Waiting for server to be ready..."
             sleep 5
-          done || (echo "Server failed to start!" && exit 1)
+          done
+          echo "Server failed to start!"
+          exit 1
 
       - name: Install Meticulous CLI
         run: |
-          yarn global add @alwaysmeticulous/cli
-          echo "$(yarn global bin)" >> $GITHUB_PATH
+          yarn add @alwaysmeticulous/cli
+          echo "./node_modules/.bin" >> $GITHUB_PATH
 
-      - name: Run Meticulous Visual Tests
+            - name: Run Meticulous Visual Tests
         run: |
+          if [ -z "${{ secrets.METICULOUS_API_TOKEN }}" ]; then
+            echo "Error: METICULOUS_API_TOKEN is not set. Exiting."
+            exit 1
+          fi
           meticulous run-all-tests \
             --apiToken=${{ secrets.METICULOUS_API_TOKEN }} \
             --appUrl="http://localhost:3000/" \
             --headless \
             --noSandbox \
             --baseTestRunId=Pkm7WCBcGMRzfgtTd7Mdc8rNNt
+
       - name: Stop server
         run: |
           kill $(cat server.pid) || true
