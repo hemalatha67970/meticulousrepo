@@ -1,14 +1,9 @@
 name: github pages release
 
 on:
-  push:
-    branches:
-      - main
-      - baseline-branch
-      - new-visual-branch
-  pull_request:
-    branches:
-      - main
+  push: {}
+  pull_request: {}
+   
 jobs:
   deploy:
     runs-on: ubuntu-latest
