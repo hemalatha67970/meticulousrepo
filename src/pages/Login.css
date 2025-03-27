@@ -15,87 +15,51 @@
   font-family: 'DM Mono', sans-serif;
   font-size: 28px;
   line-height: 48px;
-  text-align: center;
-  padding: 30px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
   color: #2d3748; /* Darker gray */
+  margin-bottom: 20px;
 }
 
-/* Wrapper for the login form */
+/* Form Section */
 .login_wrapper {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-/* Inner Wrapper for Form Section */
-.login_wrapper-inner {
   background-color: #3182ce; /* Light blue background */
-  border-radius: 8px 8px 0 0;
+  border-radius: 8px;
   padding: 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  border: 1px solid #d1d5db; /* Light gray border */
+  width: 100%;
+  max-width: 400px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Credentials Section */
-.login_credentials_wrap {
-  font-family: 'DM Mono', sans-serif;
-  color: #ffffff;
+/* Input Styles */
+input[type="text"],
+input[type="password"] {
+  width: calc(100% - 20px);
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-.login_credentials_wrap-inner {
-  background-color: #edf2f7; /* Very light gray */
-  padding: 20px 30px;
-  border-radius: 0 0 8px 8px;
-  text-align: center;
-  word-break: break-word;
-  color: #2d3748; /* Dark gray text color */
-}
-
-/* Form Input Columns */
-.form_column {
+/* Login Button */
+button {
+  background-color: #48bb78; /* Green */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 0;
   width: 100%;
-  max-width: 292px;
-  padding-top: 20px;
-  margin: 0 auto;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-/* Responsive Design for Tablet and Below */
-@media only screen and (max-width: 900px) {
-  .form_column {
-    max-width: 100%;
-  }
-
-  .login_wrapper-inner {
-    padding: 20px;
-  }
+button:hover {
+  background-color: #38a169;
 }
 
+/* Responsive Design */
 @media only screen and (max-width: 600px) {
-  .login_logo {
-    font-size: 24px;
-    padding: 20px 0;
-  }
-
-  .login_wrapper-inner {
-    padding: 15px;
-  }
-}
-
-@media only screen and (max-width: 400px) {
-  .login_wrapper-inner,
-  .login_credentials_wrap-inner {
-    width: 90%;
-    padding: 15px;
-  }
-
-  .form_column {
-    padding-top: 15px;
+  .login_wrapper {
+    padding: 20px;
   }
 }
